@@ -1,0 +1,15 @@
+from issue_tracker.models import Task, Type, Status
+from django.db.models import Q
+from datetime import datetime, timedelta
+
+
+last_month = datetime.now() - timedelta(days=30)
+Task.objects.filter(status__name_of_status='Done').filter(updated_at__gte=last_month)
+
+
+Task.objects.filter((Q(status__name_of_status='New') | Q(status__name_of_status='Done')) & (Q(type__name_of_type='Bug') | Q(type__name_of_type='Task')))
+
+
+Task.objects.filter((Q(summary__icontains='bug') | Q(type__name_of_type='Bug') | ~Q(status__name_of_status='Done'))).distinct()
+
+
